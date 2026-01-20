@@ -7,25 +7,19 @@
 **トレーニング記録Webアプリケーション** - 日々のトレーニングを記録・管理・分析するWebアプリ
 
 ### 技術スタック
-- **フロントエンド**: React + TypeScript + Vite + TailwindCSS
-- **バックエンド**: Ruby on Rails 8.0.2 (API mode)
+- **アプリケーション**: Ruby on Rails 8.0.2
 - **データベース**: PostgreSQL 15 + Redis
 - **認証**: Devise + JWT
 
-### 🎯 現在の実装状況（40%完了）
+### 🎯 現在の実装状況
 - ✅ **基盤システム**: 開発環境、認証、データベース
-- ✅ **管理者機能**: トレーニングマスタ管理画面
-- ✅ **ユーザー機能**: トレーニング記録作成・一覧表示
-- 🔄 **次の実装**: ダッシュボード・統計表示機能
+- ✅ **API機能**: トレーニング管理・Record API
+- 🔄 **次の実装**: Rails標準ビューでの画面実装
 
 ### 🚀 利用可能な機能
 ```
-# ユーザー向け機能
-http://localhost:3000/training-records    # トレーニング記録
-http://localhost:3000/auth-test           # 認証テスト
-
-# 管理者向け機能
-http://localhost:3000/admin/training-management  # 管理画面
+# Rails 8 アプリケーション
+http://localhost:3000/  # アプリケーションのルート
 ```
 
 ## 開発環境
@@ -165,72 +159,44 @@ end
 @records = current_user.training_records.includes(:training)
 ```
 
-### React（フロントエンド）
+### Railsビュー（ERBテンプレート）
 
-#### コンポーネント設計
-- 関数コンポーネント + Hooks
-- 1ファイル = 1コンポーネント
-- Props型定義は必須
+#### ビュー設計
+- ERBテンプレートとパーシャルを活用
+- コントローラからビューへのデータ渡し
+- Rails標準のHelperを活用
 
-```typescript
-interface TrainingCardProps {
-  training: Training;
-  onClick: (id: number) => void;
-}
+```erb
+<% # app/views/trainings/index.html.erb %>
+<h1>トレーニング一覧</h1>
 
-export const TrainingCard: React.FC<TrainingCardProps> = ({ training, onClick }) => {
-  return (
-    <div onClick={() => onClick(training.id)}>
-      <h3>{training.name}</h3>
-      <p>{training.description}</p>
-    </div>
-  );
-};
+<% @trainings.each do |training| %>
+  <div class="training-card">
+    <h3><%= training.name %></h3>
+    <p><%= training.description %></p>
+    <%= link_to '詳細', training_path(training) %>
+  </div>
+<% end %>
 ```
 
-#### カスタムフック
-- ロジックの再利用
-- APIコールはカスタムフックに
+#### フォーム処理
+- form_withヘルパーの活用
+- Strong Parametersでセキュリティ確保
 
-```typescript
-export const useTrainings = () => {
-  const [trainings, setTrainings] = useState<Training[]>([]);
-  const [loading, setLoading] = useState(false);
-  
-  const fetchTrainings = async () => {
-    setLoading(true);
-    try {
-      const response = await api.get('/trainings');
-      setTrainings(response.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  
-  useEffect(() => {
-    fetchTrainings();
-  }, []);
-  
-  return { trainings, loading, refetch: fetchTrainings };
-};
-```
+```erb
+<%= form_with model: @training do |form| %>
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
 
-#### 状態管理
-- グローバル状態: Zustand または Context API
-- ローカル状態: useState
-- サーバー状態: カスタムフック
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_area :description %>
+  </div>
 
-```typescript
-// AuthContextの例
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within AuthProvider');
-  }
-  return context;
-};
+  <%= form.submit %>
+<% end %>
 ```
 
 ## ディレクトリ構造
@@ -259,23 +225,19 @@ backend/
 │       └── update_user_stats_job.rb
 ```
 
-### フロントエンド
+### Railsビュー
 ```
-frontend/src/
-├── components/
-│   ├── common/          # 共通コンポーネント
-│   ├── auth/            # 認証関連
-│   ├── dashboard/       # ダッシュボード
-│   ├── training/        # トレーニング
-│   ├── calendar/        # カレンダー
-│   ├── ranking/         # ランキング
-│   └── admin/           # 管理画面
-├── pages/               # ページコンポーネント
-├── hooks/               # カスタムフック
-├── services/            # API通信
-├── contexts/            # Context API
-├── types/               # TypeScript型定義
-└── utils/               # ユーティリティ
+backend/app/views/
+├── layouts/
+│   └── application.html.erb  # メインレイアウト
+├── trainings/
+│   ├── index.html.erb        # 一覧ページ
+│   ├── show.html.erb         # 詳細ページ
+│   └── _form.html.erb        # フォームパーシャル
+├── shared/
+│   └── _header.html.erb      # ヘッダーパーシャル
+└── admin/
+    └── trainings/            # 管理画面
 ```
 
 ## データベース

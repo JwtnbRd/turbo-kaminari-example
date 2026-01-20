@@ -1,6 +1,10 @@
-y# 開発環境セットアップ手順
+# Rails 8 Application
 
-## 前提条件
+シンプルなRails 8アプリケーション
+
+## 開発環境セットアップ
+
+### 前提条件
 
 ホストマシンに以下をインストール：
 
@@ -8,14 +12,15 @@ y# 開発環境セットアップ手順
 - Visual Studio Code
 - VS Code 拡張機能: Dev Containers
 - Git
+- Ruby 3.3+
+- Rails 8.0+
 
 ## セットアップ手順
 
-### 1. リポジトリをクローン
+### 1. 新規Rails アプリケーション作成
 
 ```bash
-git clone [リポジトリURL]
-cd suku-suku-squat
+rails new . --database=postgresql --skip-test
 ```
 
 ### 2. DevContainer を起動
@@ -37,47 +42,59 @@ claude
 claude -c
 ```
 
-初回起動時に認証を求められるので、付与されたライセンス情報を使用しつつ、画面の指示に沿って進める
-
-### 4. 開発サーバーの起動
-
-DevContainer 内のルートで以下コマンドを実行：
+### 4. Docker環境でのセットアップ
 
 ```bash
-# 全サービス（Frontend, Backend, DB, Redis）を起動。基本的にはこれ一個で大丈夫
-bash scripts/container-manage.sh start
+# Dockerfileがない場合は作成が必要
+docker-compose build
+docker-compose up -d db redis
+docker-compose run --rm web bundle install
+```
 
-# バックエンドのみ起動する場合
-bash scripts/container-backend.sh start   # バックエンド + データベース
+### 5. データベース初期化
 
-# フロントエンドのみ起動する場合
-bash scripts/container-frontend.sh start
+```bash
+docker-compose run --rm web rails db:create
+docker-compose run --rm web rails db:migrate
+```
+
+### 6. アプリケーション起動
+
+```bash
+docker-compose up
 ```
 
 ### アクセス URL
 
-- Frontend (React): http://localhost:3000
-- Backend (Rails): http://localhost:4000
+- アプリケーション: http://localhost:3000
 
-## 開発フロー
+## Scaffoldでリソース生成
 
-DevContainer 内部では修正した差分のステージング、コミットまではできますが、push は外部との接続となるため失敗する可能性があります。
-その際は push はホストマシンローカルのターミナルから push すれば OK です。
+```bash
+# 例：Postリソースの生成
+docker-compose run --rm web rails generate scaffold Post title:string body:text published:boolean
+
+# マイグレーション実行
+docker-compose run --rm web rails db:migrate
+```
 
 ## よく使うコマンド
 
 ```bash
-# サービスの状態確認
-bash scripts/container-manage.sh status
+# Railsコンソール
+docker-compose run --rm web rails console
 
-# ログ確認
-bash scripts/container-manage.sh logs
+# Railsサーバー起動
+docker-compose up
 
-# 再起動
-bash scripts/container-manage.sh restart
+# データベースリセット
+docker-compose run --rm web rails db:drop db:create db:migrate
 
-# 停止
-bash scripts/container-manage.sh stop
+# gem インストール
+docker-compose run --rm web bundle install
+
+# 新しいgemを追加後
+docker-compose build
 ```
 
 ## トラブルシューティング
@@ -94,21 +111,17 @@ bash scripts/container-manage.sh start
 ### Rails のデータベースエラー
 
 ```bash
-docker exec workspace-backend-web-1 rails db:create
-docker exec workspace-backend-web-1 rails db:migrate
-docker-compose restart backend-web
+docker-compose run --rm web rails db:create
+docker-compose run --rm web rails db:migrate
+docker-compose restart web
 ```
 
-### bundle/npm install が必要な場合
+### bundle install が必要な場合
 
 ```bash
 # Rails
-docker exec workspace-backend-web-1 bundle install
-docker-compose restart backend-web
-
-# React
-docker exec workspace-frontend-web-1 npm install
-docker-compose restart frontend-web
+docker-compose run --rm web bundle install
+docker-compose restart web
 ```
 
 ### ポートが使用中
@@ -120,6 +133,12 @@ netstat -ano | findstr :3000  # Windows
 
 # 該当プロセスを停止するか、docker-compose.ymlでポート変更
 ```
+
+## 技術スタック
+- **Framework**: Ruby on Rails 8.0+
+- **Database**: PostgreSQL 15
+- **Cache**: Redis 7
+- **Container**: Docker & Docker Compose
 
 ---
 
