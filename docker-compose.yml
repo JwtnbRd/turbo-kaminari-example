@@ -1,0 +1,105 @@
+services:
+  # Frontend Service
+  frontend-web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app:delegated # 環境変数を使わず直接指定
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_API_URL=http://backend-web:3000
+    env_file:
+      - ./frontend/.env
+    networks:
+      - app-network
+    stdin_open: true
+    tty: true
+    command: npm run dev
+
+  # Backend Service
+  backend-web:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "4000:3000"
+    volumes:
+      - ./backend:/app:delegated # 環境変数を使わず直接指定
+      - bundle-cache:/app/vendor/bundle
+    environment:
+      - DATABASE_URL=postgres://postgres:password@backend-db:5432/app_development
+      - REDIS_URL=redis://backend-redis:6379/0
+      - RAILS_ENV=development
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - backend-db
+      - backend-redis
+    networks:
+      - app-network
+    stdin_open: true
+    tty: true
+    command: bundle exec rails server -b 0.0.0.0
+
+  # Database Service
+  backend-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: app_development
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./backend/db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+  # Redis Service
+  backend-redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - app-network
+
+  # Test Service (Backend)
+  backend-test:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/app:delegated # 環境変数を使わず直接指定
+      - bundle-cache:/usr/local/bundle
+    environment:
+      - DATABASE_URL=postgres://postgres:password@backend-db:5432/app_test
+      - REDIS_URL=redis://backend-redis:6379/1
+      - RAILS_ENV=test
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - backend-db
+      - backend-redis
+    networks:
+      - app-network
+    stdin_open: true
+    tty: true
+    command: bundle exec rails test
+    profiles:
+      - test
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  redis-data:
+  bundle-cache:
