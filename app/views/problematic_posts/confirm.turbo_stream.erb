@@ -1,20 +1,4 @@
-<%# Debug: Problematic Confirm Turbo Stream Template %>
-<% Rails.logger.info "🎬 PROBLEMATIC CONFIRM TURBO_STREAM: Template executed with #{@posts.count} posts" %>
 
 <%= turbo_stream.replace "posts_container" do %>
-  <!-- デバッグ: Turbo Stream実行確認 -->
-  <div id="debug_info" style="background-color: #f8d7da; color: #721c24; padding: 8px; margin: 10px 0; border-radius: 4px; font-size: 12px;">
-    ⚠️ PROBLEMATIC CONFIRM: Turbo Stream executed at <%= Time.current.strftime("%H:%M:%S") %>
-    <br>
-    <strong>ページネーションリンクにホバーしてURLを確認してください！</strong>
-  </div>
-
   <%= render 'posts_container' %>
 <% end %>
-
-<%# JavaScript Console Debug %>
-<script>
-  console.log('⚠️ PROBLEMATIC CONFIRM: Turbo Stream executed');
-  console.log('⚠️ PROBLEMATIC CONFIRM: Check pagination links for URL pollution!');
-  console.log('⚠️ PROBLEMATIC CONFIRM: Time:', new Date().toLocaleTimeString());
-</script>

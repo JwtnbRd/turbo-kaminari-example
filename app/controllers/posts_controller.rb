@@ -9,20 +9,15 @@ class PostsController < ApplicationController
   # PATCH /posts/1/confirm
   # 問題再現用のconfirmアクション（statusをconfirmedに更新）
   def confirm
-    Rails.logger.info "🔵 CONFIRM ACTION: Post #{@post.id} - Current status: #{@post.status}"
 
     # 重複実行を防ぐ
     if @post.status != 'confirmed'
       @post.update!(status: 'confirmed')
-      Rails.logger.info "✅ CONFIRM ACTION: Post #{@post.id} - Status updated to: #{@post.status}"
-    else
-      Rails.logger.info "⚠️ CONFIRM ACTION: Post #{@post.id} - Already confirmed, no update needed"
     end
 
     respond_to do |format|
       format.turbo_stream do
         @posts = Post.page(params[:page])
-        Rails.logger.info "📡 CONFIRM ACTION: Rendering Turbo Stream with #{@posts.count} posts"
         # 専用のTurbo Streamテンプレートを使用
       end
       format.html { redirect_to posts_path }
@@ -32,20 +27,15 @@ class PostsController < ApplicationController
   # PATCH /posts/1/unconfirm
   # statusをunconfirmedに戻すアクション
   def unconfirm
-    Rails.logger.info "🔴 UNCONFIRM ACTION: Post #{@post.id} - Current status: #{@post.status}"
 
     # 重複実行を防ぐ
     if @post.status != 'unconfirmed'
       @post.update!(status: 'unconfirmed')
-      Rails.logger.info "✅ UNCONFIRM ACTION: Post #{@post.id} - Status updated to: #{@post.status}"
-    else
-      Rails.logger.info "⚠️ UNCONFIRM ACTION: Post #{@post.id} - Already unconfirmed, no update needed"
     end
 
     respond_to do |format|
       format.turbo_stream do
         @posts = Post.page(params[:page])
-        Rails.logger.info "📡 UNCONFIRM ACTION: Rendering Turbo Stream with #{@posts.count} posts"
         # 専用のTurbo Streamテンプレートを使用
       end
       format.html { redirect_to posts_path }

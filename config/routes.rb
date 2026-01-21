@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   # 問題のあるページネーション（汚染される状態）
-  resources :problematic_posts, only: [:index] do
+  resources :problematic_posts, only: [ :index ] do
     patch :confirm, on: :member
     patch :unconfirm, on: :member
   end
@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   end
 
   # Turbo本来の思想（テーブル部分のみ更新、ページネーションは更新対象外）
-  resources :turbo_posts, only: [:index] do
+  resources :turbo_posts, only: [ :index ] do
     patch :confirm, on: :member
     patch :unconfirm, on: :member
   end
@@ -27,5 +27,5 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  root "posts#index"
+  root "problematic_posts#index"
 end

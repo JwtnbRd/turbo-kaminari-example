@@ -2,20 +2,12 @@
 
 <% content_for :title, "Fixed Posts - Pagination Solution Demo" %>
 
-<h1>Fixed Posts (解決済み)</h1>
-<p style="color: #28a745; font-weight: bold;">
-  このページでは、safe_params解決策によりページネーションリンクの汚染が防止されています。
-</p>
-<p style="color: #6c757d;">
-  Confirm/Unconfirmボタンをクリック後、ページネーションリンクにホバーしてURLが正常であることを確認してください。
-</p>
+<h1>safe_paramsにて解決したやつ</h1>
 
 <%= render 'posts_container' %>
 
 <p style="margin-top: 20px;">
-  <%= link_to "問題のあるページ（/problematic_posts）へ", problematic_posts_path, style: "color: #dc3545; font-weight: bold;" %>
+  <%= link_to "問題のあるページ", problematic_posts_path, style: "color: #dc3545; font-weight: bold;" %>
   |
-  <%= link_to "Turbo本来の思想版（/turbo_posts）へ", turbo_posts_path, style: "color: #17a2b8; font-weight: bold;" %>
-  |
-  <%= link_to "New post", new_post_path %>
+  <%= link_to "paginate切り出し版", turbo_posts_path, style: "color: #17a2b8; font-weight: bold;" %>
 </p>

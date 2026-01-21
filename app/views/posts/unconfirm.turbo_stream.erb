@@ -1,18 +1,4 @@
-<%# Debug: Unconfirm Turbo Stream Template %>
-<% Rails.logger.info "🎬 UNCONFIRM TURBO_STREAM: Template executed with #{@posts.count} posts" %>
 
 <%= turbo_stream.replace "posts_container" do %>
-  <!-- デバッグ: Turbo Stream実行確認 -->
-  <div id="debug_info" style="background-color: #f8d7da; color: #721c24; padding: 8px; margin: 10px 0; border-radius: 4px; font-size: 12px;">
-    🔴 UNCONFIRM: Turbo Stream executed at <%= Time.current.strftime("%H:%M:%S") %>
-  </div>
-
   <%= render 'posts_container' %>
 <% end %>
-
-<%# JavaScript Console Debug %>
-<script>
-  console.log('🔴 UNCONFIRM: Turbo Stream executed successfully');
-  console.log('🔴 UNCONFIRM: Posts container replaced');
-  console.log('🔴 UNCONFIRM: Time:', new Date().toLocaleTimeString());
-</script>
