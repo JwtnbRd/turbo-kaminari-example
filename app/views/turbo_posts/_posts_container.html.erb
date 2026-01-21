@@ -1,0 +1,9 @@
+<div id="posts_container">
+  <!-- ページネーションは更新対象外（Turbo Streamで置き換えない） -->
+  <%= paginate @posts %>
+
+  <!-- テーブル部分のみTurbo Streamで更新 -->
+  <div id="posts_table">
+    <%= render 'table_content' %>
+  </div>
+</div>

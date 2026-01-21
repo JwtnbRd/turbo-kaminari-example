@@ -1,0 +1,19 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Problematic Posts - Pagination Bug Demo" %>
+
+<h1>Problematic Posts</h1>
+<p style="color: #dc3545; font-weight: bold;">
+  このページでは、Turbo Stream更新後にページネーションリンクが汚染される問題を実証します。
+</p>
+<p style="color: #6c757d;">
+  Confirm/Unconfirmボタンをクリック後、ページネーションリンクにホバーしてURLを確認してください。
+</p>
+
+<%= render 'posts_container' %>
+
+<p style="margin-top: 20px;">
+  <%= link_to "safe_params解決版（/posts）へ", posts_path, style: "color: #28a745; font-weight: bold;" %>
+  |
+  <%= link_to "Turbo本来の思想版（/turbo_posts）へ", turbo_posts_path, style: "color: #17a2b8; font-weight: bold;" %>
+</p>

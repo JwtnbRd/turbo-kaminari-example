@@ -1,0 +1,23 @@
+current directory: /workspace/vendor/bundle/ruby/3.4.0/gems/debug-1.11.1/ext/debug
+/usr/local/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /workspace/vendor/bundle/ruby/3.4.0/gems/debug-1.11.1/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20260121-95944-3gwd57 sitelibdir\=./.gem.20260121-95944-3gwd57 clean
+make: Warning: File 'Makefile' has modification time 0.0016 s in the future
+make: warning:  Clock skew detected.  Your build may be incomplete.
+
+current directory: /workspace/vendor/bundle/ruby/3.4.0/gems/debug-1.11.1/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20260121-95944-3gwd57 sitelibdir\=./.gem.20260121-95944-3gwd57
+compiling debug.c
+compiling iseq_collector.c
+linking shared-object debug/debug.so
+
+current directory: /workspace/vendor/bundle/ruby/3.4.0/gems/debug-1.11.1/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20260121-95944-3gwd57 sitelibdir\=./.gem.20260121-95944-3gwd57 install
+make: Warning: File 'debug.so' has modification time 0.0029 s in the future
+/usr/bin/install -c -m 0755 debug.so ./.gem.20260121-95944-3gwd57/debug
+make: warning:  Clock skew detected.  Your build may be incomplete.
+
+current directory: /workspace/vendor/bundle/ruby/3.4.0/gems/debug-1.11.1/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20260121-95944-3gwd57 sitelibdir\=./.gem.20260121-95944-3gwd57 clean

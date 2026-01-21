@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Workspace" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+
+    <style>
+      /* CSS transitions for button hover effects */
+      .action-button {
+        transition: all 0.2s ease-in-out;
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+        border: none;
+        cursor: pointer;
+      }
+
+      .btn-confirm {
+        background-color: #28a745;
+        color: white;
+      }
+
+      .btn-confirm:hover {
+        background-color: #218838;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+      }
+
+      .btn-unconfirm {
+        background-color: #dc3545;
+        color: white;
+      }
+
+      .btn-unconfirm:hover {
+        background-color: #c82333;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+      }
+
+      /* テーブルの改善 */
+      .posts-table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 20px 0;
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      }
+
+      .posts-table th {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        padding: 12px;
+        font-weight: 600;
+        color: #495057;
+      }
+
+      .posts-table td {
+        border: 1px solid #dee2e6;
+        padding: 12px;
+        vertical-align: middle;
+      }
+
+      .posts-table tr:hover {
+        background-color: #f8f8f8;
+        transition: background-color 0.2s ease;
+      }
+
+      /* ページネーションの改善 */
+      .pagination {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0;
+      }
+
+      .pagination a, .pagination .current {
+        padding: 8px 16px;
+        margin: 0 4px;
+        border-radius: 4px;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+
+      .pagination a {
+        background-color: #f8f9fa;
+        color: #007bff;
+        border: 1px solid #dee2e6;
+      }
+
+      .pagination a:hover {
+        background-color: #e9ecef;
+        transform: translateY(-1px);
+      }
+
+      .pagination .current {
+        background-color: #007bff;
+        color: white;
+        border: 1px solid #007bff;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+
+  <body>
+    <%= yield %>
+  </body>
+</html>

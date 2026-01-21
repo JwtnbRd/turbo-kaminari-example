@@ -1,0 +1,58 @@
+<table class="posts-table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Title</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @posts.each do |post| %>
+      <tr>
+        <td><%= post.id %></td>
+        <td><%= post.title %></td>
+        <td class="status-cell"
+            style="
+            <% if post.confirmed? %>
+              background-color: #d4edda; color: #155724;
+            <% elsif post.unconfirmed? %>
+              background-color: #fff3cd; color: #856404;
+            <% else %>
+              background-color: #f8d7da; color: #721c24;
+            <% end %>
+            font-weight: bold; text-align: center;">
+          <% if post.confirmed? %>
+            ✅ confirmed
+          <% elsif post.unconfirmed? %>
+            📄 unconfirmed
+          <% else %>
+            ❓ <%= post.status %>
+          <% end %>
+        </td>
+        <td style="text-align: center;">
+          <% if post.confirmed? %>
+            <!-- 確認済みの場合はUnconfirmボタン表示 -->
+            <%= link_to "🔄 Unconfirm", unconfirm_turbo_post_path(post, page: params[:page]),
+                  data: {
+                    turbo_method: :patch,
+                    turbo_stream: true
+                  },
+                  class: "action-button btn-unconfirm" %>
+          <% elsif post.unconfirmed? %>
+            <!-- 未確認の場合はConfirmボタン表示 -->
+            <%= link_to "✅ Confirm", confirm_turbo_post_path(post, page: params[:page]),
+                  data: {
+                    turbo_method: :patch,
+                    turbo_stream: true
+                  },
+                  class: "action-button btn-confirm" %>
+          <% else %>
+            <!-- その他の状態の場合（通常はないはず） -->
+            <span style="color: #6c757d;">Unknown Status</span>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

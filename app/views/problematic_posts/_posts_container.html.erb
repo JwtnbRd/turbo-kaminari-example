@@ -1,0 +1,9 @@
+<div id="posts_container">
+  <!-- PROBLEMATIC: ページネーションリンクがPOST/PATCHパラメータで汚染される -->
+  <!-- safe_params解決策を適用していない状態 -->
+  <%= paginate @posts %>
+
+  <div id="posts">
+    <%= render 'table_content' %>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+<%
+  # AFTER: safe_params解決策実装
+  # ページネーションリンクでPOST/PATCHパラメータ汚染を防ぐ
+  safe_params = params.is_a?(Hash) ? params.except(:action, :controller, :authenticity_token, :_method) : {}
+  safe_params = safe_params.merge(action: :index, id: nil)
+%>
+<!-- 解決策: safe_paramsでページネーションリンクを洗浄 -->
+<%= paginate records, params: safe_params %>

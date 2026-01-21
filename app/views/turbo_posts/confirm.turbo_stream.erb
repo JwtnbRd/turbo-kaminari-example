@@ -1,0 +1,16 @@
+<%# Turbo本来の思想: テーブル部分のみを更新、ページネーションは更新対象外 %>
+<% Rails.logger.info "🎬 TURBO CONFIRM TURBO_STREAM: Template executed - updating posts_table only" %>
+
+<%= turbo_stream.replace "posts_table" do %>
+  <!-- Turbo Stream: テーブル部分のみ更新（ページネーションは対象外） -->
+  <div id="posts_table">
+    <%= render 'table_content' %>
+  </div>
+<% end %>
+
+<%# JavaScript Console Debug %>
+<script>
+  console.log('🟢 TURBO CONFIRM: Turbo Stream executed - posts_table only');
+  console.log('🟢 TURBO CONFIRM: Pagination was NOT updated (by design)');
+  console.log('🟢 TURBO CONFIRM: Time:', new Date().toLocaleTimeString());
+</script>

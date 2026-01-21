@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker-compose up:*)",
+      "Bash(bundle install)",
+      "Bash(bundle exec rails:*)",
+      "Bash(npm run build:*)",
+      "Bash(docker exec:*)",
+      "Bash(curl:*)",
+      "Bash(docker logs:*)",
+      "mcp__serena__get_symbols_overview",
+      "mcp__serena__find_file",
+      "Bash(docker-compose:*)",
+      "Bash(ss:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -1,0 +1,19 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Turbo Posts - Turbo Stream Scoped Update Demo" %>
+
+<h1>Turbo Posts (Turbo本来の思想)</h1>
+<p style="color: #17a2b8; font-weight: bold;">
+  このページでは、Turbo Streamの更新範囲をテーブル部分のみに限定することで問題を解決しています。
+</p>
+<p style="color: #6c757d;">
+  Confirm/Unconfirmボタンをクリックしても、ページネーションは更新対象外のため汚染されません。
+</p>
+
+<%= render 'posts_container' %>
+
+<p style="margin-top: 20px;">
+  <%= link_to "問題のあるページ（/problematic_posts）へ", problematic_posts_path, style: "color: #dc3545; font-weight: bold;" %>
+  |
+  <%= link_to "safe_params解決版（/posts）へ", posts_path, style: "color: #28a745; font-weight: bold;" %>
+</p>
