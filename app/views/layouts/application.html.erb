@@ -123,6 +123,20 @@
   </head>
 
   <body>
+    <!-- フラッシュメッセージ表示エリア -->
+    <div id="flash">
+      <% if notice %>
+        <div style="background-color: #d4edda; color: #155724; padding: 12px; margin: 10px 0; border-radius: 4px; border-left: 4px solid #28a745;">
+          <%= notice %>
+        </div>
+      <% end %>
+      <% if alert %>
+        <div style="background-color: #f8d7da; color: #721c24; padding: 12px; margin: 10px 0; border-radius: 4px; border-left: 4px solid #dc3545;">
+          <%= alert %>
+        </div>
+      <% end %>
+    </div>
+
     <%= yield %>
   </body>
 </html>

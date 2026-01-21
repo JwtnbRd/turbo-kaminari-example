@@ -9,9 +9,11 @@ class TurboPostsController < ApplicationController
   # PATCH /turbo_posts/:id/confirm
   # Turbo本来の思想：テーブル部分のみを更新し、ページネーションは更新対象外
   def confirm
-
-    if @post.status != 'confirmed'
-      @post.update!(status: 'confirmed')
+    if @post.status != "confirmed"
+      @post.update!(status: "confirmed")
+      flash.now[:notice] = "✅ Post #{@post.id} が確認済みに更新されました"
+    else
+      flash.now[:alert] = "⚠️ Post #{@post.id} は既に確認済みです"
     end
 
     respond_to do |format|
@@ -25,9 +27,11 @@ class TurboPostsController < ApplicationController
   # PATCH /turbo_posts/:id/unconfirm
   # Turbo本来の思想：テーブル部分のみを更新し、ページネーションは更新対象外
   def unconfirm
-
-    if @post.status != 'unconfirmed'
-      @post.update!(status: 'unconfirmed')
+    if @post.status != "unconfirmed"
+      @post.update!(status: "unconfirmed")
+      flash.now[:notice] = "🔄 Post #{@post.id} が未確認に戻されました"
+    else
+      flash.now[:alert] = "⚠️ Post #{@post.id} は既に未確認です"
     end
 
     respond_to do |format|

@@ -13,6 +13,9 @@ class PostsController < ApplicationController
     # 重複実行を防ぐ
     if @post.status != 'confirmed'
       @post.update!(status: 'confirmed')
+      flash.now[:notice] = "✅ Post #{@post.id} が確認済みに更新されました"
+    else
+      flash.now[:alert] = "⚠️ Post #{@post.id} は既に確認済みです"
     end
 
     respond_to do |format|
@@ -31,6 +34,9 @@ class PostsController < ApplicationController
     # 重複実行を防ぐ
     if @post.status != 'unconfirmed'
       @post.update!(status: 'unconfirmed')
+      flash.now[:notice] = "🔄 Post #{@post.id} が未確認に戻されました"
+    else
+      flash.now[:alert] = "⚠️ Post #{@post.id} は既に未確認です"
     end
 
     respond_to do |format|
