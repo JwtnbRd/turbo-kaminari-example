@@ -1,8 +1,8 @@
 <%
-  # AFTER: safe_params解決策実装
-  # ページネーションリンクでPOST/PATCHパラメータ汚染を防ぐ
+  # paramsがHash形式か確認しつつ、現在のリクエストの制御用パラメータを除外する
   safe_params = params.is_a?(Hash) ? params.except(:action, :controller, :authenticity_token, :_method) : {}
+  # リンク先を一覧（index）へ強制し、PATCHリクエストに含まれる特定のIDを消去する
   safe_params = safe_params.merge(action: :index, id: nil)
 %>
-<!-- 解決策: safe_paramsでページネーションリンクを洗浄 -->
+
 <%= paginate records, params: safe_params %>
